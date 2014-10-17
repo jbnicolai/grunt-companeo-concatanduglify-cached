@@ -6,45 +6,45 @@
  * Licensed under the MIT license.
  */
 
-'use strict';
+/*globals module, require, console */
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
+    'use strict';
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+    var uglify = require('uglify-js');
+    var chalk = require('chalk');
 
-  grunt.registerMultiTask('companeo_concatanduglify_cached', 'The best Grunt plugin ever.', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
+    // Please see the Grunt documentation for more information regarding task
+    // creation: http://gruntjs.com/creating-tasks
+
+    grunt.registerMultiTask('companeo_concatanduglify_cached', 'The best Grunt plugin ever.', function () {
+        // Merge task-specific and/or target-specific options with these defaults.
+        var options = this.options({
+                separator : ';'
+            }),
+            res;
+
+        // Iterate over all specified file groups.
+        this.files.forEach(function (file) {
+            // Concat specified files
+            var src = file.src.filter(function (filepath) {
+                // Warn on and remove invalid source files (if nonull was set).
+                if (!grunt.file.exists(filepath)) {
+                    grunt.log.error('Source file "' + filepath + '" not found.');
+                    return false;
+                } else {
+                    return true;
+                }
+            }).map(function (filepath) {
+                return grunt.file.read(filepath);
+            }).join(grunt.util.normalizelf(options.separator));
+
+            if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
+                grunt.log.writeln('creation', file.dest);
+                grunt.file.write(file.dest + '.js', src);
+                res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
+                grunt.file.write(file.dest + '.min.js', res.code);
+            }
+        });
     });
-
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
-        }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
-
-      // Handle options.
-      src += options.punctuation;
-
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
-
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
-    });
-  });
-
 };
