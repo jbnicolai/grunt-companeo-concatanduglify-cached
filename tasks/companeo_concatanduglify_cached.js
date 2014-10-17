@@ -20,7 +20,8 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('companeo_concatanduglify_cached', 'The best Grunt plugin ever.', function () {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
-                separator : ';'
+                separator   : ';',
+                no_compress : true
             }),
             res;
 
@@ -42,8 +43,13 @@ module.exports = function (grunt) {
             if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
                 grunt.log.writeln('creation', file.dest);
                 grunt.file.write(file.dest + '.js', src);
-                res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
-                grunt.file.write(file.dest + '.min.js', res.code);
+
+                if (!options.no_compress) {
+                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
+                    grunt.file.write(file.dest + '.min.js', res.code);
+                } else {
+                    grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
+                }
             }
         });
     });
