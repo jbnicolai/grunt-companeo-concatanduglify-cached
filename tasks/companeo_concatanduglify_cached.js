@@ -31,7 +31,7 @@ module.exports = function (grunt) {
             var src = file.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set).
                 if (!grunt.file.exists(filepath)) {
-                    grunt.log.error('Source file "' + filepath + '" not found.');
+                    grunt.fail.warn('Source file "' + filepath + '" not found.');
                     return false;
                 } else {
                     return true;
