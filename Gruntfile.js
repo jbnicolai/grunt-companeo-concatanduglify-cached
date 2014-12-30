@@ -40,8 +40,45 @@
             // Unit tests.
             nodeunit                        : {
                 tests : ['test/*_test.js']
-            }
+            },
 
+            gitcommit: {
+                newversion: {
+                    options: {
+                        cwd: './'
+                    },
+                    files: [
+                        {
+                            src: [
+                                'tasks/*',
+                                'Gruntfile.js',
+                                'package.json'
+                            ]
+                        }
+                    ]
+                }
+            },
+
+            bump: {
+                options: {
+                    files: [
+                        'package.json'
+                    ],
+                    updateConfigs: [],
+                    commit: true,
+                    commitMessage: 'Release v%VERSION%',
+                    commitFiles: [
+                        'package.json'
+                    ],
+                    createTag: true,
+                    tagName: 'v%VERSION%',
+                    tagMessage: 'Version %VERSION%',
+                    push: true,
+                    pushTo: 'upstream',
+                    gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+                    globalReplace: false
+                }
+            }
         });
 
         // Actually load this plugin's task(s).
@@ -50,6 +87,8 @@
         // These plugins provide necessary tasks.
         grunt.loadNpmTasks('grunt-contrib-jshint');
         grunt.loadNpmTasks('grunt-contrib-nodeunit');
+        grunt.loadNpmTasks('grunt-git');
+        grunt.loadNpmTasks('grunt-contrib-bump');
 
         // Whenever the "test" task is run, first clean the "tmp" dir, then run this
         // plugin's task(s), then test the result.
@@ -57,6 +96,11 @@
 
         // By default, lint and run all tests.
         grunt.registerTask('default', ['jshint', 'companeo_concatanduglify_cached']);
+
+        grunt.registerTask('publish-patch', [
+            'bump:patch',
+            'gitcommit:newversion'
+        ]);
 
     };
 }());

@@ -17,7 +17,7 @@ module.exports = function (grunt) {
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
 
-    grunt.registerMultiTask('companeo_concatanduglify_cached', 'The best Grunt plugin ever.', function () {
+    grunt.registerMultiTask('companeo_concatanduglify_cached', 'Uglify each file only if necessary and concat all after.', function () {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
                 separator  : ';',
@@ -27,23 +27,14 @@ module.exports = function (grunt) {
 
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
-            for (var iterateur = 0; iterateur < file.src.length; iterateur++) {
-                grunt.log.writeln('test fichier ' + file.src[iterateur]);
-            }
             // Concat specified files
             var src = file.src.filter(function (filepath) {
-                // Warn on and remove invalid source files (if nonull was set).
-                try {
-                    var file_exists = 'file: ' + filepath + ' found ? ' + (grunt.file.exists(filepath) ? 'OK' : '***** NOT OK *****');
-                    grunt.log.writeln(file_exists);
-                    if (!grunt.file.exists(filepath)) {
-                        grunt.fail.warn('Source file "' + filepath + '" not found.');
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } catch (ex) {
-                    grunt.log.writeln('NOTOK --- ' + filepath);
+                // Warn on and remove invalid source files (if nonull was set)
+                if (!grunt.file.exists(filepath)) {
+                    grunt.fail.warn('Source file "' + filepath + '" not found.');
+                    return false;
+                } else {
+                    return true;
                 }
             }).map(function (filepath) {
                 return grunt.file.read(filepath);
