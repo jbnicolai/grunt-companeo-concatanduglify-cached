@@ -42,7 +42,7 @@ module.exports = function (grunt) {
                 return grunt.file.read(filepath);
             }).join(grunt.util.normalizelf(options.separator));
 
-            if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
+            //if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
                 grunt.log.writeln('creation', file.dest);
                 grunt.file.write(file.dest + '.js', src);
 
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
                 } else {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
                 }
-            }
+            //}
         });
     });
 };
