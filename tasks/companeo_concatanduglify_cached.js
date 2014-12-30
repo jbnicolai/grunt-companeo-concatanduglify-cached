@@ -32,7 +32,7 @@ module.exports = function (grunt) {
                 nonull: true
             }, f.src),
                 iter;
-            for (iter = 0; iter < f.orig.src.length; iter++) {
+            for (iter = 0; iter < file.orig.src.length; iter++) {
                 grunt.file.writeln('origine : ' + file.orig.src[iter]);
             }
 
