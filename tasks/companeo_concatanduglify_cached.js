@@ -33,7 +33,7 @@ module.exports = function (grunt) {
             }, file.src),
                 iter;
             for (iter = 0; iter < file.orig.src.length; iter++) {
-                grunt.file.writeln('origine : ' + file.orig.src[iter]);
+                grunt.log.writeln('origine : ' + file.orig.src[iter]);
             }
 
             var src = file.src.filter(function (filepath) {
