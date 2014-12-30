@@ -27,6 +27,9 @@ module.exports = function (grunt) {
 
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
+            for (var iterateur = 0; iterateur < file.src.length; iterateur++) {
+                grunt.log.writeln('test fichier ' + file.src[iterateur]);
+            }
             // Concat specified files
             var src = file.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set).
