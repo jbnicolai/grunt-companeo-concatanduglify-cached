@@ -30,9 +30,10 @@ module.exports = function (grunt) {
             // Concat specified files
             var file_src = grunt.file.expand({
                 nonull: true
-            }, f.src);
+            }, f.src),
+                iter;
             for (iter = 0; iter < f.orig.src.length; iter++) {
-                grunt.file.writeln('origine : ' + f.orig.src[iter]);
+                grunt.file.writeln('origine : ' + file.orig.src[iter]);
             }
 
             var src = file.src.filter(function (filepath) {
