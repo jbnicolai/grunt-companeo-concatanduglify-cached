@@ -28,6 +28,13 @@ module.exports = function (grunt) {
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
             // Concat specified files
+            var file_src = grunt.file.expand({
+                nonull: true
+            }, f.src);
+            for (iter = 0; iter < f.orig.src.length; iter++) {
+                grunt.file.writeln('origine : ' + f.orig.src[iter]);
+            }
+
             var src = file.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set)
                 if (!grunt.file.exists(filepath)) {
