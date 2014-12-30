@@ -20,8 +20,8 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('companeo_concatanduglify_cached', 'The best Grunt plugin ever.', function () {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
-                separator   : ';',
-                no_compress : true
+                separator  : ';',
+                no_compress: true
             }),
             res;
 
@@ -30,28 +30,32 @@ module.exports = function (grunt) {
             // Concat specified files
             var src = file.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set).
-                var file_exists = 'file: ' + filepath + ' found ? ' + (grunt.file.exists(filepath) ? 'OK' : '***** NOT OK *****');
-                grunt.log.writeln(file_exists);
-                if (!grunt.file.exists(filepath)) {
-                    grunt.fail.warn('Source file "' + filepath + '" not found.');
-                    return false;
-                } else {
-                    return true;
+                try {
+                    var file_exists = 'file: ' + filepath + ' found ? ' + (grunt.file.exists(filepath) ? 'OK' : '***** NOT OK *****');
+                    grunt.log.writeln(file_exists);
+                    if (!grunt.file.exists(filepath)) {
+                        grunt.fail.warn('Source file "' + filepath + '" not found.');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } catch (ex) {
+                    grunt.log.writeln('NOTOK --- ' + filepath);
                 }
             }).map(function (filepath) {
                 return grunt.file.read(filepath);
             }).join(grunt.util.normalizelf(options.separator));
 
             //if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
-                grunt.log.writeln('creation', file.dest);
-                grunt.file.write(file.dest + '.js', src);
+            grunt.log.writeln('creation', file.dest);
+            grunt.file.write(file.dest + '.js', src);
 
-                if (!options.no_compress) {
-                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
-                    grunt.file.write(file.dest + '.min.js', res.code);
-                } else {
-                    grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
-                }
+            if (!options.no_compress) {
+                res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
+                grunt.file.write(file.dest + '.min.js', res.code);
+            } else {
+                grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
+            }
             //}
         });
     });
